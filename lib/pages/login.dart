@@ -46,8 +46,10 @@ class _LoginPageState extends State<LoginPage> {
               passwordController: passwordController
             ),
             SimpleButton(
-              text: 'Login',
+              text: 'Entrar',
               width: screenSize.width,
+              paddingVertical: 10.0,
+              fontSize: 20.0,
               onPressed: () => this.submit()
             ),
           ],

@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'package:no_doubts_app/utils.dart';
 
-class LoginForm extends StatelessWidget {
+class SignUpForm extends StatelessWidget {
 
-  LoginForm({ @required this.formKey, @required this.emailController, @required this.passwordController });
+  SignUpForm({
+    @required this.formKey,
+    @required this.emailController,
+    @required this.passwordController,
+    @required this.confirmPasswordController,
+  });
+
   final GlobalKey<FormState> formKey;
   final TextEditingController emailController;
   final TextEditingController passwordController;
+  final TextEditingController confirmPasswordController;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +38,7 @@ class LoginForm extends StatelessWidget {
                 controller: this.emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: new InputDecoration(
-                  labelText: 'Digite seu email',
+                  labelText: 'Cadastre seu email',
                   hintText: 'seu@email.com',
                 ),
                 validator: (value) => validateEmail(value),
@@ -43,7 +50,19 @@ class LoginForm extends StatelessWidget {
                 controller: this.passwordController,
                 obscureText: true,
                 decoration: new InputDecoration(
-                  labelText: 'Digite sua senha',
+                  labelText: 'Cadastre sua senha',
+                  hintText: '********',
+                ),
+                validator: (value) => validatePassword(value),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20.0),
+              ),
+              TextFormField(
+                controller: this.confirmPasswordController,
+                obscureText: true,
+                decoration: new InputDecoration(
+                  labelText: 'Confirme sua senha',
                   hintText: '********',
                 ),
                 validator: (value) => validatePassword(value),

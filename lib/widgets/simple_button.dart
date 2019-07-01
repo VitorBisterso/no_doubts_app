@@ -5,22 +5,26 @@ class SimpleButton extends StatelessWidget {
   SimpleButton({
     @required this.text,
     @required this.width,
-    @required this.paddingVertical,
     @required this.fontSize,
-    @required this.onPressed
+    @required this.onPressed,
+    this.backgroundColor = Colors.lightBlue,
+    this.paddingVertical = 0,
+    this.marginHorizontal = 0,
   });
 
   final String text;
   final double width;
-  final double paddingVertical;
   final double fontSize;
   final Function onPressed;
+  final Color backgroundColor;
+  final double paddingVertical;
+  final double marginHorizontal;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: this.width,
-      margin: EdgeInsets.all(20.0),
+      margin: EdgeInsets.symmetric(horizontal: 20.0),
       child: RaisedButton(
         child: Text(
           this.text,
@@ -30,7 +34,7 @@ class SimpleButton extends StatelessWidget {
           ),
         ),
         onPressed: this.onPressed,
-        color: Colors.lightBlue,
+        color: this.backgroundColor,
         padding: EdgeInsets.symmetric(vertical: this.paddingVertical),
       ),
     );

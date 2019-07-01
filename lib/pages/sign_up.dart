@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 
-import 'package:no_doubts_app/pages/sign_up.dart';
-
 import 'package:no_doubts_app/widgets/page_wrapper.dart';
 import 'package:no_doubts_app/widgets/logo_header.dart';
-import 'package:no_doubts_app/widgets/login_form.dart';
+import 'package:no_doubts_app/widgets/sign_up_form.dart';
 import 'package:no_doubts_app/widgets/simple_button.dart';
 import 'package:no_doubts_app/widgets/link_to_page.dart';
 
-class LoginPage extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
   void submit() {
     if (this._formKey.currentState.validate()) {
       print('Email: ${emailController.text}');
       print('Password: ${passwordController.text}');
+      print('Confirm Password: ${confirmPasswordController.text}');
     }
   }
 
@@ -30,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -44,26 +45,27 @@ class _LoginPageState extends State<LoginPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           LogoHeader(),
-          LoginForm(
+          SignUpForm(
             formKey: _formKey,
             emailController: emailController,
-            passwordController: passwordController
+            passwordController: passwordController,
+            confirmPasswordController: confirmPasswordController,
           ),
           Column(
             children: <Widget>[
               SimpleButton(
-                text: "Entrar",
+                text: "Cadastrar",
                 width: screenSize.width,
                 paddingVertical: 10.0,
                 fontSize: 20.0,
                 onPressed: () => this.submit()
               ),
               LinkToPage(
-                text: "Ainda não tem uma conta? Crie agora!",
+                text: "Já tem uma conta? Faça login!",
                 fontSize: 15.0,
                 color: Colors.lightBlue[200],
                 marginVertical: 10.0,
-                onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage())),
+                onPressed: () => Navigator.pop(context),
               ),
             ],
           ),

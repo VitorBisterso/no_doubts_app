@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class LoginHeader extends StatelessWidget {
+class LogoHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(

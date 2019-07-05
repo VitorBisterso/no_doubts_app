@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:no_doubts_app/utils.dart';
-
 class LoginForm extends StatelessWidget {
 
   LoginForm({ @required this.formKey, @required this.emailController, @required this.passwordController });
@@ -34,7 +32,6 @@ class LoginForm extends StatelessWidget {
                   labelText: 'Digite seu email',
                   hintText: 'seu@email.com',
                 ),
-                validator: (value) => validateEmail(value),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 20.0),
@@ -46,7 +43,6 @@ class LoginForm extends StatelessWidget {
                   labelText: 'Digite sua senha',
                   hintText: '********',
                 ),
-                validator: (value) => validatePassword(value),
               ),
             ],
           ),

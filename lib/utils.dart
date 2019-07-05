@@ -17,3 +17,11 @@ String validatePassword(String password) {
 
   return null;
 }
+
+String confirmPassword(String password, String confirmPassword) {
+  if (password != confirmPassword) {
+    return 'As senhas não são iguais!';
+  }
+  
+  return validatePassword(password);
+}

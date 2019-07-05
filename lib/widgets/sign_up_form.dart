@@ -65,7 +65,7 @@ class SignUpForm extends StatelessWidget {
                   labelText: 'Confirme sua senha',
                   hintText: '********',
                 ),
-                validator: (value) => validatePassword(value),
+                validator: (_) => confirmPassword(this.passwordController.text, this.confirmPasswordController.text),
               ),
             ],
           ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class LinkToPage extends StatelessWidget {
+class LinkToScreen extends StatelessWidget {
 
-  LinkToPage({
+  LinkToScreen({
     @required this.text,
     @required this.fontSize,
     @required this.onPressed,

@@ -16,7 +16,7 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   var isLoading = false;
-  var error = false;
+  var apiError = false;
 
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   final emailController = TextEditingController();
@@ -34,7 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
         })
         .catchError((_) {
           setState(() {
-            error = true;
+            apiError = true;
             isLoading = false;
           });
         });
@@ -66,7 +66,7 @@ class _SignUpPageState extends State<SignUpPage> {
           children: <Widget>[
             LogoHeader(),
             ConditionalMessage(
-              condition: this.error,
+              condition: this.apiError,
               message: "Erro ao cadastrar usuário, tente novamente",
               textAlign: TextAlign.center,
               color: Colors.redAccent,

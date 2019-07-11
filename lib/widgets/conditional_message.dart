@@ -16,12 +16,12 @@ class ConditionalMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return this.condition ? Text(
-      this.message,
-      textAlign: this.textAlign,
+    return condition ? Text(
+      message,
+      textAlign: textAlign,
       style: TextStyle(
         fontSize: 20.0,
-        color: this.color,
+        color: color,
       )
     ) : Container();
   }

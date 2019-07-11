@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:no_doubts_app/utils/validations.dart';
+
 class LoginForm extends StatelessWidget {
 
   LoginForm({ @required this.formKey, @required this.emailController, @required this.passwordController });
@@ -12,7 +14,7 @@ class LoginForm extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(20.0),
       child: Form(
-        key: this.formKey,
+        key: formKey,
         child: Theme(
           data: ThemeData(
             primarySwatch: Colors.lightBlue,
@@ -26,23 +28,25 @@ class LoginForm extends StatelessWidget {
           child: Column(
             children: <Widget>[
               TextFormField(
-                controller: this.emailController,
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: new InputDecoration(
                   labelText: 'Digite seu email',
                   hintText: 'seu@email.com',
                 ),
+                validator: (value) => validateEmail(value),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 20.0),
               ),
               TextFormField(
-                controller: this.passwordController,
+                controller: passwordController,
                 obscureText: true,
                 decoration: new InputDecoration(
                   labelText: 'Digite sua senha',
                   hintText: '********',
                 ),
+                validator: (value) => validatePassword(value),
               ),
             ],
           ),

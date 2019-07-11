@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:no_doubts_app/utils.dart';
+import 'package:no_doubts_app/utils/validations.dart';
 
 class SignUpForm extends StatelessWidget {
 
@@ -21,7 +21,7 @@ class SignUpForm extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(20.0),
       child: Form(
-        key: this.formKey,
+        key: formKey,
         child: Theme(
           data: ThemeData(
             primarySwatch: Colors.lightBlue,
@@ -35,7 +35,7 @@ class SignUpForm extends StatelessWidget {
           child: Column(
             children: <Widget>[
               TextFormField(
-                controller: this.emailController,
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 decoration: new InputDecoration(
                   labelText: 'Cadastre seu email',
@@ -47,7 +47,7 @@ class SignUpForm extends StatelessWidget {
                 padding: EdgeInsets.only(top: 20.0),
               ),
               TextFormField(
-                controller: this.passwordController,
+                controller: passwordController,
                 obscureText: true,
                 decoration: new InputDecoration(
                   labelText: 'Cadastre sua senha',
@@ -59,13 +59,13 @@ class SignUpForm extends StatelessWidget {
                 padding: EdgeInsets.only(top: 20.0),
               ),
               TextFormField(
-                controller: this.confirmPasswordController,
+                controller: confirmPasswordController,
                 obscureText: true,
                 decoration: new InputDecoration(
                   labelText: 'Confirme sua senha',
                   hintText: '********',
                 ),
-                validator: (_) => confirmPassword(this.passwordController.text, this.confirmPasswordController.text),
+                validator: (_) => confirmPassword(passwordController.text, confirmPasswordController.text),
               ),
             ],
           ),

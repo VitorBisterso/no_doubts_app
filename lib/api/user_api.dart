@@ -1,15 +1,13 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:password/password.dart';
 
 import 'package:no_doubts_app/models/user_model.dart';
 import 'package:no_doubts_app/api/endpoints.dart';
 
 Future<User> signUp(String email, String password) async {
-  final encryptedPassword = Password.hash(password, PBKDF2());
-
-  User user = new User(user: email, password: encryptedPassword);
+  User user = new User(user: email, password: password);
 
   Response response = await post(
     '$BASE_URL/$SIGN_UP',
@@ -20,4 +18,34 @@ Future<User> signUp(String email, String password) async {
   );
 
   return userFromJson(response.body);
+}
+
+Future<Map<String, dynamic>> login(String email, String password) async {
+  User user = new User(user: email, password: password);
+
+  Response response = await post(
+    '$BASE_URL/$LOGIN',
+    headers: {
+      HttpHeaders.contentTypeHeader: 'application/json'
+    },
+    body: userToJson(user),
+  );
+
+  return json.decode(response.body);
+}
+
+Future<void> logout() async {
+  await delete(
+    '$BASE_URL/$LOGOUT_ACCESS',
+    headers: {
+      HttpHeaders.contentTypeHeader: 'application/json'
+    },
+  );
+
+  await delete(
+    '$BASE_URL/$LOGOUT_REFRESH',
+    headers: {
+      HttpHeaders.contentTypeHeader: 'application/json'
+    },
+  );
 }

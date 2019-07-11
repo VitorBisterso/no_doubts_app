@@ -11,14 +11,14 @@ class PageWrapper extends StatelessWidget {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints viewportConstraints) {
         return Scaffold(
-          backgroundColor: this.pageColor,
+          backgroundColor: pageColor,
           body: SafeArea(
             child: SingleChildScrollView(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minHeight: viewportConstraints.maxHeight * 0.9,
                 ),
-                child: this.page,
+                child: page,
               )
             )
           )

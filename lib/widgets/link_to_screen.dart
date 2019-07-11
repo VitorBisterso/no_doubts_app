@@ -19,16 +19,16 @@ class LinkToScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: this.marginVertical),
+      margin: EdgeInsets.symmetric(vertical: marginVertical),
       child: InkWell(
         child: Text(
-          this.text,
+          text,
           style: TextStyle(
-            fontSize: this.fontSize,
-            color: this.color,
+            fontSize: fontSize,
+            color: color,
           ),
         ),
-        onTap: this.onPressed,
+        onTap: onPressed,
       ),
     );
   }

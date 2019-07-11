@@ -23,19 +23,19 @@ class SimpleButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: this.width,
+      width: width,
       margin: EdgeInsets.symmetric(horizontal: 20.0),
       child: RaisedButton(
         child: Text(
-          this.text,
+          text,
           style: TextStyle(
             color: Colors.white,
-            fontSize: this.fontSize
+            fontSize: fontSize
           ),
         ),
-        onPressed: this.onPressed,
-        color: this.backgroundColor,
-        padding: EdgeInsets.symmetric(vertical: this.paddingVertical),
+        onPressed: onPressed,
+        color: backgroundColor,
+        padding: EdgeInsets.symmetric(vertical: paddingVertical),
       ),
     );
   }

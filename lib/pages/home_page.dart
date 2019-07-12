@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:no_doubts_app/api/user_api.dart';
+import 'package:no_doubts_app/api/doubt_api.dart';
+import 'package:no_doubts_app/models/doubt_model.dart';
 import 'package:no_doubts_app/pages/login_page.dart';
-import 'package:no_doubts_app/utils/token_storage.dart';
+import 'package:no_doubts_app/utils/internal_storage.dart';
+import 'package:no_doubts_app/utils/utils.dart';
 
 class HomePage extends StatefulWidget {
-  final TokenStorage storage;
+  final InternalStorage storage;
+  final String userEmail;
+  final List<String> tokens;
 
-  HomePage({ Key key, @required this.storage }) : super(key: key);
+  HomePage({ Key key, @required this.storage, @required this.userEmail, @required this.tokens }) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -15,32 +20,67 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
 
+  bool isExiting;
   bool isLoading;
+  bool retryRequest;
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
 
-    _tabController = new TabController(vsync: this, initialIndex: 1, length: 2);
+    _tabController = new TabController(vsync: this, initialIndex: 0, length: 2);
     isLoading = false;
+    isExiting = false;
+    retryRequest = false;
+    fetchDoubts();
+  }
+
+  void fetchDoubts() {
+    setState(() {
+      isLoading = true;
+      retryRequest = false;
+    });
+    getDoubts(widget.userEmail, widget.tokens).then((value) {
+      switch (value) {
+        case RETRY:
+          widget.storage.readFile(ACCESS_TOKEN_FILE).then((String newToken) {
+            widget.tokens.insert(0, newToken);
+            setState(() {
+              isLoading = false;
+              retryRequest = true;
+            });
+          });
+          break;
+        case '':
+          exitToLogin();
+          break;
+        default:
+          setState(() {
+            isLoading = false;
+          });
+          
+          final doubts = doubtsFromJson(value);
+          print(doubts);
+      }
+    });
   }
 
   void exitToLogin() {
     setState(() {
-        isLoading = true;
+        isExiting = true;
       });
-    logout()
+    logout(widget.tokens)
       .then((_) {
-        widget.storage.writeTokenToFile('', ACCESS_TOKEN_FILE);
-        widget.storage.writeTokenToFile('', REFRESH_TOKEN_FILE);
+        widget.storage.writeTokens('', '');
+        widget.storage.writeStringToFile('', EMAIL_FILE);
         Navigator.pushReplacement(
           context, 
-          MaterialPageRoute(builder: (context) => LoginPage(storage: new TokenStorage())),
+          MaterialPageRoute(builder: (context) => LoginPage(storage: new InternalStorage())),
         );
       })
       .catchError((_) {
-        isLoading = false;
+        isExiting = false;
       });
   }
 
@@ -66,12 +106,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 15.0),
-            child: InkWell(
-              child: isLoading
-              ? Center(
+            child: isExiting
+            ? Center(
                 child: CircularProgressIndicator(backgroundColor: Colors.white)
               )
-              : Icon(Icons.exit_to_app),
+            : InkWell(
+              child: Icon(Icons.exit_to_app),
               onTap: () => this.exitToLogin(),
             ),
           ),
@@ -80,7 +120,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       body: TabBarView(
         controller: _tabController,
         children: <Widget>[
-          Text("Doubts"),
+          retryRequest
+          ? InkWell(
+            child: Icon(Icons.restore),
+            onTap: () => this.fetchDoubts(),
+          )
+          : isLoading
+          ? Center(
+              child: CircularProgressIndicator()
+            )
+          : Text("Doubts"),
           Text("Topics"),
         ],
       ),

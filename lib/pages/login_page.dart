@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:no_doubts_app/api/user_api.dart';
-import 'package:no_doubts_app/utils/token_storage.dart';
+import 'package:no_doubts_app/utils/internal_storage.dart';
 
 import 'package:no_doubts_app/pages/sign_up_page.dart';
 import 'package:no_doubts_app/pages/home_page.dart';
@@ -14,7 +14,7 @@ import 'package:no_doubts_app/widgets/link_to_screen.dart';
 import 'package:no_doubts_app/widgets/conditional_message.dart';
 
 class LoginPage extends StatefulWidget {
-  final TokenStorage storage;
+  final InternalStorage storage;
 
   LoginPage({ Key key, @required this.storage }) : super(key: key);
 
@@ -23,9 +23,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var accessToken;
-  var refreshToken;
-
   var signUpResult;
   var isLoading;
   var apiError;
@@ -38,11 +35,11 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
 
-    widget.storage.readToken(ACCESS_TOKEN_FILE).then((String access) {
-      if (access != '') {
-        widget.storage.readToken(REFRESH_TOKEN_FILE).then((String refresh) {
-          if (refresh != '') {
-            this.navigateToHomePage(context);
+    widget.storage.readTokens().then((List<String> tokens) {
+      if (tokens.elementAt(0) != '' && tokens.elementAt(1) != '') {
+        widget.storage.readFile(EMAIL_FILE).then((String email) {
+          if (email != '') {
+            this.navigateToHomePage(context, email, tokens);
           }
         });
       }
@@ -63,10 +60,13 @@ class _LoginPageState extends State<LoginPage> {
           final accessToken = result["access_token"];
           final refreshToken = result["refresh_token"];
 
-          widget.storage.writeTokenToFile(accessToken, ACCESS_TOKEN_FILE);
-          widget.storage.writeTokenToFile(refreshToken, REFRESH_TOKEN_FILE);
+          widget.storage.writeTokens(accessToken, refreshToken);
+          widget.storage.writeStringToFile(emailController.text, EMAIL_FILE);
           
-          this.navigateToHomePage(context);
+          List<String> tokens = new List<String>();
+          tokens.add(accessToken);
+          tokens.add(refreshToken);
+          this.navigateToHomePage(context, emailController.text, tokens);
         })
         .catchError((error) {
           setState(() {
@@ -77,10 +77,14 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void navigateToHomePage(BuildContext context) async {
+  void navigateToHomePage(BuildContext context, String userEmail, List<String> tokens) async {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => HomePage(storage: new TokenStorage())),
+      MaterialPageRoute(builder: (context) => HomePage(
+        storage: new InternalStorage(),
+        userEmail: userEmail,
+        tokens: tokens,
+      )),
     );
   }
 
@@ -92,6 +96,8 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() {
       signUpResult = result;
+      apiError = '';
+      isLoading = false;
     });
   }
 
